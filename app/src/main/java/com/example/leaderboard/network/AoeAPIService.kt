@@ -1,5 +1,6 @@
 package com.example.leaderboard.network
 
+import com.example.leaderboard.model.LeaderboardResponse
 import com.example.leaderboard.model.PlayerGamesResponse
 import com.example.leaderboard.model.PlayerProfile
 import com.example.leaderboard.model.PlayerSearchResponse
@@ -28,5 +29,23 @@ interface AoeAPIService {
     @GET("players/search")
     suspend fun searchPlayers(@Query("query") query: String): PlayerSearchResponse
 
+    // TODO: Leaderborad Type : String
+    //  rm_solo
+    //  rm_team
+    //  rm_1v1
+    //  rm_2v2
+    //  rm_3v3
+    //  rm_4v4
+    //  qm_1v1
+    //  qm_2v2
+    //  qm_3v3
+    //  qm_4v4
+    @GET("leaderboards/{leaderboard}")
+    suspend fun getLeaderboard(
+        @Path("leaderboard") leaderboard: String,
+        @Query("page") page: Int? = null,
+        @Query("query") query: String? = null,
+        @Query("profile_id") profileId: Int? = null
+    ): LeaderboardResponse
 
 }
