@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">leaderboard</string>
     <string name="searching_text">Searching ID</string>
+    <string name="player_rank">#%1$d</string>
 </resources>

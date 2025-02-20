@@ -19,4 +19,5 @@ data class Player(
     val losses: Int,
     val streak: Int,
     val last_game_at: String
+
 )
