@@ -8,19 +8,39 @@
     android:orientation="vertical"
     tools:context=".ui.MainActivity">
 
-    <com.google.android.material.search.SearchBar
+    <SearchView
         android:id="@+id/searchView"
         android:hint="@string/searching_text"
+        android:background="@drawable/shape_all_rectangle"
         android:layout_marginTop="50dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
         android:layout_width="match_parent"
         android:layout_height="50dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:gravity="right">
+
+        <CheckedTextView
+            android:id="@+id/btn_mode_selected"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="RM_SOLO"
+            android:textColor="@color/white"
+            android:layout_marginEnd="18dp"
+            android:gravity="center">
+        </CheckedTextView>
+
+    </LinearLayout>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefresh_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
         android:layout_marginBottom="10dp">
 
         <androidx.recyclerview.widget.RecyclerView

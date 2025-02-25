@@ -12,7 +12,7 @@ import com.example.leaderboard.databinding.ItemLeaderboardBinding
 import com.example.leaderboard.model.Player
 import java.util.Locale
 
-// TODO:
+
 class LeaderBoardAdapter (private val onItemClick: (Player) -> Unit ) :
     ListAdapter<Player,LeaderBoardAdapter.LeaderBoardViewHolder>(LeaderBoardDiffCallback()){
 

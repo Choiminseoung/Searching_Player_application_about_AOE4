@@ -6,7 +6,6 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.leaderboard.databinding.ActivityMainBinding
@@ -22,8 +21,6 @@ class MainActivity : AppCompatActivity() {
     private val TAG: String = "MainActivity"
     private lateinit var binding : ActivityMainBinding
     private lateinit var adapter : LeaderBoardAdapter
-    private val typeLeaderBoard : String = "rm_team"
-
     private val viewModel: LeaderboardViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,7 +34,8 @@ class MainActivity : AppCompatActivity() {
         observeLiveData()
         viewListener()
 
-        viewModel.getTop100LeaderBoard(typeLeaderBoard)
+
+        viewModel.getTop50LeaderBoard(binding.btnModeSelected.text.toString())
 
     }
 
@@ -49,26 +47,50 @@ class MainActivity : AppCompatActivity() {
         // Recycler view setting
         binding.leaderboardRecyclerView.layoutManager = LinearLayoutManager(this)
         binding.leaderboardRecyclerView.adapter = adapter
+
     }
 
     private fun viewListener() {
+
         binding.leaderboardRecyclerView.addOnScrollListener(object: RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 // 위로 스크롤할 때 새로고침
                 if (!recyclerView.canScrollVertically(-1)) { // 최상단 체크
                     binding.swipeRefreshLayout.isRefreshing = true
-                    viewModel.getTop100LeaderBoard(typeLeaderBoard)
+                    viewModel.getTop50LeaderBoard(binding.btnModeSelected.text.toString())
                 }
             }
         })
+
+        binding.btnModeSelected.setOnClickListener {
+            viewModel.modeList.value?.let{ mode ->
+                BottomSheetDialog(
+                    context = this,
+                    option = mode,
+                    onOptionSelected = { selectMode ->
+                        viewModel.selectMode(selectMode)
+                    }
+                ).show()
+            }
+        }
+
+
+
     }
 
     private fun observeLiveData() {
         viewModel.leaderboardList.observe(this) { items ->
             // DIffUtil 활용
             adapter.submitList(items)
-            binding.swipeRefreshLayout.isRefreshing = false
+            if(binding.swipeRefreshLayout.isRefreshing)
+                Log.i(TAG,"Refresh Set")
+                binding.swipeRefreshLayout.isRefreshing = false
+        }
+
+        viewModel.selectedMode.observe(this) { selectedMode ->
+            binding.btnModeSelected.text = selectedMode
+            viewModel.getTop50LeaderBoard(selectedMode)
         }
 
         viewModel.errorMessage.observe(this) { error ->
